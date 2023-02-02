@@ -35,7 +35,7 @@ export default {
     Movies,
     MoviesGenre,
   },
-  middleware: ["check-auth", "auth"],
+  // middleware: ["check-auth", "auth"],
   methods: {
     changeGenre(type) {
       this.genre = type;

@@ -1,8 +1,6 @@
 <template>
   <div class="movieList">
     <movie2 :data="movieData" v-for="movieData in movies"></movie2>
-    <h1>tes</h1>
-    {{ movie }}
   </div>
 </template>
 <script>
