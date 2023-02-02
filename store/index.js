@@ -55,6 +55,7 @@
 
 import Vuex from "vuex";
 import axios from "axios";
+import Cookie from "js-cookie";
 
 const createStore = () => {
   return new Vuex.Store({
@@ -76,6 +77,12 @@ const createStore = () => {
       },
       getUsername(state) {
         return state.userData.displayName;
+      },
+      getUserId(state) {
+        return state.userData.userId;
+      },
+      isAutheticated(state) {
+        return state.token !== null;
       },
     },
 
@@ -136,13 +143,47 @@ const createStore = () => {
             displayName: authData.displayName,
           })
           .then((response) => {
-            commit("setToken", response.data.idToken);
-            commit("setUserData", {
+            let userData = {
               username: response.data.displayName,
               email: response.data.email,
-              localId: response.data.localId,
-            });
+              userId: response.data.localId,
+            };
+            commit("setToken", response.data.idToken);
+            commit("setUserData", userData);
+            window.localStorage.setItem("token", response.data.idToken);
+            window.localStorage.setItem("user", JSON.stringify(userData));
+            Cookie.set("jwt", response.data.idToken);
+            Cookie.set("acc_user", JSON.stringify(userData));
           });
+      },
+      initAuth({ commit }, req) {
+        let token;
+        let user;
+        if (req) {
+          if (!req.headers.cookie) {
+            return;
+          }
+          let pecahcookie = req.headers.cookie.split(";");
+          token = pecahcookie
+            .find((c) => c.trim().startsWith("jwt="))
+            .split("=")[1];
+          user = pecahcookie
+            .find((c) => c.trim().startsWith("acc_user"))
+            .split("=")[1];
+          user = JSON.parse(decodeURIComponent(user));
+          commit("setUserData", user);
+          commit("setToken", token);
+          console.log(user);
+        }
+      },
+      logout({ commit }) {
+        commit("setToken", null);
+        Cookie.remove("acc_user");
+        Cookie.remove("jwt");
+        if (process.client) {
+          window.localStorage.removeItem("token");
+          window.localStorage.removeItem("user");
+        }
       },
     },
   });

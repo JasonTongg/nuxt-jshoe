@@ -125,6 +125,7 @@ import axios from "axios";
 
 export default {
   name: "InputForm",
+  middleware: ["check-auth", "auth"],
   data() {
     return {
       movie: {

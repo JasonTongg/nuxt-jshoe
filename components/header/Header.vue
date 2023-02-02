@@ -21,7 +21,9 @@
                 <nuxt-link tag="a" to="/user/login">Login</nuxt-link>
               </li>
               <li v-show="this.$store.getters.userLogin">
-                <h1>{{ $store.state.userData?.username }}</h1>
+                <nuxt-link tag="a" to="/user">{{
+                  $store.state.userData?.username
+                }}</nuxt-link>
               </li>
             </ul>
           </nav>
@@ -35,7 +37,8 @@
 export default {
   methods: {
     logout() {
-      this.$store.state.token = null;
+      this.$store.dispatch("logout");
+      this.$router.push("/user/login");
     },
   },
 };
