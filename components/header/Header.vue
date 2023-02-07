@@ -5,7 +5,9 @@
       <div class="row">
         <div class="col-lg-6">
           <div class="header__logo">
-            <nuxt-link tag="h1" to="/">movieReview</nuxt-link>
+            <nuxt-link tag="h1" to="/" class="text-brand"
+              ><img src="images/logo.png" class="logo" />movieReview</nuxt-link
+            >
           </div>
         </div>
         <div class="col-lg-6">
@@ -97,5 +99,16 @@ export default {
   transition: all, 0.3s;
   padding: 5px 0;
   display: block;
+}
+
+.text-brand {
+  font-family: "Ubuntu", sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo {
+  width: 50px !important;
 }
 </style>

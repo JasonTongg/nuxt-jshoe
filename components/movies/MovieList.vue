@@ -17,5 +17,6 @@ export default {
 <style scoped>
 .featured__filter {
   min-width: 300px;
+  width: fit-content;
 }
 </style>

@@ -10,17 +10,27 @@
             <MoviesGenre :change="changeGenre"></MoviesGenre>
           </div>
         </div>
-        <div class="movieList" v-if="genre !== ''">
-          <Movies
-            :data="movie"
-            v-for="movie in movieData.filter((item) => item.category === genre)"
-            :key="movie.id"
-          >
-          </Movies>
-        </div>
-        <div class="movieList" v-else>
-          <Movies :data="movie" v-for="movie in movieData" :key="movie.id">
-          </Movies>
+        <div class="container">
+          <div class="row" v-if="genre !== ''">
+            <Movies
+              :data="movie"
+              v-for="movie in movieData.filter(
+                (item) => item.category === genre
+              )"
+              :key="movie.id"
+              class="col-md-4 justify-content-md-center"
+            >
+            </Movies>
+          </div>
+          <div class="row justify-content-md-center" v-else>
+            <Movies
+              :data="movie"
+              v-for="movie in movieData"
+              :key="movie.id"
+              class="col-md-4"
+            >
+            </Movies>
+          </div>
         </div>
       </div>
     </section>
