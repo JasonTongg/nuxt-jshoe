@@ -47,7 +47,7 @@ export default {
       // shoes: [],
     };
   },
-  // middleware: ["check-auth", "auth"],
+  middleware: ["check-auth", "auth"],
   components: {
     Navbar,
     Footer,
