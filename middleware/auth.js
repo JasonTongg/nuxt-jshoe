@@ -1,5 +1,5 @@
 export default function (context) {
-  if (!context.store.getters.isAutheticated) {
-    context.redirect("/user/login");
+  if (!context.store.getters.isAuthenticated) {
+    context.redirect("/login");
   }
 }

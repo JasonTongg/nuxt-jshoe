@@ -1,7 +1,7 @@
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: "meeting_1",
+    title: "timedoor-final-project",
     htmlAttrs: {
       lang: "en",
     },
@@ -14,21 +14,18 @@ export default {
     link: [
       { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
       {
+        href: "https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@200;300;400;500;600&family=Roboto:ital,wght@0,300;0,400;1,300&family=Ubuntu:wght@300&display=swap",
         rel: "stylesheet",
-        href: "https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css",
-        integrity:
-          "sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC",
-        crossorigin: "anonymous",
       },
       {
+        href: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css",
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;1,300&family=Ubuntu:wght@300&display=swap",
       },
     ],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [],
+  css: ["@/assets/css/main.css"],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [],
@@ -40,8 +37,15 @@ export default {
   buildModules: [],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: [],
+  // modules: ["@nuxtjs/axios"],
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {},
+  build: {
+    transpile: [
+      "@sindresorhus/slugify",
+      "@sindresorhus/transliterate",
+      "hast-util-select",
+    ],
+  },
+  generate: { fallback: "404.html" },
 };

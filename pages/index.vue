@@ -1,149 +1,177 @@
 <template>
-  <div>
-    <section class="featured">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="section-title">
-              <h2>Movie List</h2>
-            </div>
-            <MoviesGenre :change="changeGenre"></MoviesGenre>
-          </div>
-        </div>
-        <div class="container">
-          <div class="row" v-if="genre !== ''">
-            <Movies
-              :data="movie"
-              v-for="movie in movieData.filter(
-                (item) => item.category === genre
-              )"
-              :key="movie.id"
-              class="col-md-4 justify-content-md-center"
-            >
-            </Movies>
-          </div>
-          <div class="row justify-content-md-center" v-else>
-            <Movies
-              :data="movie"
-              v-for="movie in movieData"
-              :key="movie.id"
-              class="col-md-4"
-            >
-            </Movies>
-          </div>
+  <div id="wrapper">
+    <Navbar></Navbar>
+    <main>
+      <h2>Product <span>Sale</span></h2>
+      <div class="productItems">
+        <div class="item" v-for="(shoe, index) in shoes" :key="index">
+          <img :src="shoe.image" alt="" />
+          <h2>{{ shoe.title }}</h2>
+          <h3>
+            {{
+              new Intl.NumberFormat("Rp", {
+                style: "currency",
+                currency: "idr",
+              }).format(Math.round(shoe.price * 1.6))
+            }}
+          </h3>
+          <h3>
+            {{
+              new Intl.NumberFormat("Rp", {
+                style: "currency",
+                currency: "idr",
+              }).format(shoe.price)
+            }}
+          </h3>
+          <nuxt-link
+            tag="button"
+            :to="{ path: 'details', query: { shoes: shoe } }"
+            >Details</nuxt-link
+          >
         </div>
       </div>
-    </section>
+    </main>
+
+    <Footer></Footer>
   </div>
 </template>
 
 <script>
-import Movies from "../components/movies/MovieList.vue";
-import MoviesGenre from "../components/movies/MovieGenre.vue";
+import Navbar from "../components/Navbar.vue";
+import Footer from "../components/Footer.vue";
+import axios from "axios";
 export default {
-  components: {
-    Movies,
-    MoviesGenre,
-  },
-  middleware: "check-auth",
-  methods: {
-    changeGenre(type) {
-      this.genre = type;
-    },
-  },
+  name: "IndexPage",
   data() {
     return {
-      genre: "",
+      // shoes: [],
     };
   },
-  computed: {
-    movieData() {
-      return this.$store.getters.getMovieData;
+  middleware: ["check-auth", "auth"],
+  components: {
+    Navbar,
+    Footer,
+  },
+  async asyncData() {
+    const shoes = [];
+    const post = await axios
+      .get("https://j-shoe-default-rtdb.firebaseio.com/shoeList.json")
+      .then((response) => {
+        for (const key in response.data) {
+          shoes.push({ ...response.data[key], id: key });
+        }
+      });
+    return { shoes };
+  },
+  methods: {
+    fetchData(data) {
+      console.log(data);
     },
   },
 };
 </script>
 
-<style>
-html,
-body {
-  height: 100%;
-  font-family: "Cairo", sans-serif;
-}
-
-h2,
-h5,
-h6 {
-  margin: 0;
-  color: #111111;
-  font-weight: 400;
-  font-family: "Cairo", sans-serif;
-}
-
-h2 {
-  font-size: 36px;
-}
-
-h5 {
-  font-size: 18px;
-}
-
-h6 {
-  font-size: 16px;
-}
-
-p {
-  font-size: 16px;
-  font-family: "Cairo", sans-serif;
-  color: #6f6f6f;
-  font-weight: 400;
-  line-height: 26px;
-  margin: 0 0 15px 0;
-}
-
-img {
-  max-width: 100%;
-}
-
-input:focus,
-select:focus,
-button:focus,
-textarea:focus {
-  outline: none;
-}
-
-a:hover,
-a:focus {
-  text-decoration: none;
-  outline: none;
-  color: #ffffff;
-}
-
-ul,
-ol {
+<style scoped>
+* {
   padding: 0;
   margin: 0;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  font-family: "Lexend Deca", sans-serif;
 }
-
-.featured {
-  padding-top: 30px;
-  padding-bottom: 40px;
-}
-.section-title {
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.section-title h2 {
-  color: #1c1c1c;
-  font-weight: 700;
-  position: relative;
-}
-
-.movieList {
+#wrapper {
+  min-height: 100vh;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+main {
+  padding: 2rem 5rem;
+  text-align: center;
   width: 100%;
+}
+
+main h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+main h2 span {
+  color: #093545;
+}
+
+main .productItems {
+  display: -ms-grid;
+  display: grid;
+  width: 100%;
+  gap: 1rem;
+  -ms-grid-columns: (minmax(400px, 1fr)) [auto-fit];
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+}
+
+main .productItems .item {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
+  gap: 0.8rem;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+main .productItems .item img {
+  width: 100%;
+  height: 200px;
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+
+main .productItems .item h3:first-of-type {
+  text-decoration: line-through;
+}
+
+main .productItems .item h3:last-of-type {
+  font-size: 1.4rem;
+}
+
+main .productItems .item button {
+  background-color: #093545;
+  color: white;
+  border: none;
+  outline: none;
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+@media only screen and (max-width: 600px) {
+  main {
+    padding-inline: 2rem;
+  }
+}
+
+@media only screen and (max-width: 470px) {
+  main {
+    padding-inline: 1rem;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  main .productItems {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
