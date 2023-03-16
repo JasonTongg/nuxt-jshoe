@@ -110,7 +110,7 @@ export const actions = {
       }
       token = jwtCookie.split("=")[1];
     } else {
-      if (localstorage) {
+      if (localstorage !== undefined) {
         token = localStorage?.getItem("token");
         user = JSON.parse(localStorage?.getItem("user"));
       }
