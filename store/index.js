@@ -18,6 +18,9 @@ export const getters = {
   getCart(state) {
     return state.cart;
   },
+  getToken(state) {
+    return state.token;
+  },
   isAuthenticated(state) {
     return state.token != null;
   },
@@ -102,9 +105,9 @@ export const actions = {
         .find((c) => c.trim().startsWith("acc_user"))
         .split("=")[1];
       user = JSON.parse(decodeURIComponent(user));
+      console.log(user);
       commit("setUserData", user);
       commit("setToken", token);
-      console.log(user);
     }
   },
   addUserCart({ state, commit }, shoe) {
@@ -230,5 +233,6 @@ export const actions = {
   },
   userLogout({ commit }) {
     commit("setUserData", {});
+    commit("setToken", "");
   },
 };
