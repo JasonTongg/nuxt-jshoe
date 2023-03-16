@@ -7,10 +7,11 @@
         <div
           class="item"
           v-for="shoe in shoes.filter(
-            (item) => item.userId === localStorage.getItem("userId")
+            (item) => item.userId === userData.userId
           )"
         >
           <img :src="shoe.image" alt="" />
+          <p>{{ shoe.userId }}</p>
           <h2>{{ shoe.title }}</h2>
           <h3>
             {{
@@ -65,6 +66,7 @@
     <NuxtLink tag="button" to="/add" class="addButton">
       <img src="../static/assets/plus.png" alt="plus" />
     </NuxtLink>
+    {{ userData.userId }}
   </div>
 </template>
 

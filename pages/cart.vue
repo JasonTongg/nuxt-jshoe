@@ -52,6 +52,7 @@
       </div>
     </main>
     <Footer></Footer>
+    {{ userData.userId }}
   </div>
 </template>
 <script>
@@ -66,7 +67,7 @@ export default {
   methods: {
     addItem(item) {
       this.$store.dispatch("addUserCart", item);
-      location.reload();
+      // location.reload();
     },
     removeItem(idx) {
       this.$store.dispatch("deleteUserCart", idx[0]);
@@ -94,6 +95,7 @@ export default {
       let cart = this.$store.getters.getCart.filter(
         (item) => item.userId === userId
       );
+      console.log(this.$store.getters.getCart);
       for (const item of cart) {
         if (cartArray.some((items) => items.title === item.title)) {
           let arr = cartArray.find((itemss) => itemss.title === item.title);
