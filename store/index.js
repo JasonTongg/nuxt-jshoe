@@ -88,35 +88,24 @@ export const actions = {
     //   return promise1;
   },
   initAuth({ commit, dispatch }, req) {
-    let user;
     let token;
+    let user;
     if (req) {
       if (!req.headers.cookie) {
         return;
       }
-      const jwtCookie = req.headers.cookie
-        .split(";")
-        .find((c) => c.trim().startsWith("jwt="));
-
-      const accUserCookie = req.headers.cookie
-        .split(";")
-        .find((c) => c.trim().startsWith("acc_user="));
-
-      const userCookie = accUserCookie.substr(accUserCookie.indexOf("=") + 1);
-      user = JSON.parse(decodeURIComponent(userCookie));
-
-      if (!jwtCookie) {
-        return;
-      }
-      token = jwtCookie.split("=")[1];
-    } else {
-      // if (localstorage !== undefined) {
-      token = localStorage?.getItem("token");
-      user = JSON.parse(localStorage?.getItem("user"));
-      // }
+      let pecahcookie = req.headers.cookie.split(";");
+      token = pecahcookie
+        .find((c) => c.trim().startsWith("jwt="))
+        .split("=")[1];
+      user = pecahcookie
+        .find((c) => c.trim().startsWith("acc_user"))
+        .split("=")[1];
+      user = JSON.parse(decodeURIComponent(user));
+      commit("setUserData", user);
+      commit("setToken", token);
+      console.log(user);
     }
-    commit("setToken", token);
-    commit("setUserData", user);
   },
   addUserCart({ state, commit }, shoe) {
     return axios
