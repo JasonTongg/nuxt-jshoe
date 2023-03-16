@@ -7,7 +7,7 @@
         <div
           class="item"
           v-for="shoe in shoes.filter(
-            (item) => item.userId === userData.userId
+            (item) => item.userId === localStorage.getItem("userId")
           )"
         >
           <img :src="shoe.image" alt="" />
