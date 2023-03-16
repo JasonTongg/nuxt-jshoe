@@ -90,29 +90,31 @@ export const actions = {
   initAuth({ commit, dispatch }, req) {
     let user;
     let token;
-    // if (req) {
-    if (!req.headers.cookie) {
-      return;
+    if (req) {
+      if (!req.headers.cookie) {
+        return;
+      }
+      const jwtCookie = req.headers.cookie
+        .split(";")
+        .find((c) => c.trim().startsWith("jwt="));
+
+      const accUserCookie = req.headers.cookie
+        .split(";")
+        .find((c) => c.trim().startsWith("acc_user="));
+
+      const userCookie = accUserCookie.substr(accUserCookie.indexOf("=") + 1);
+      user = JSON.parse(decodeURIComponent(userCookie));
+
+      if (!jwtCookie) {
+        return;
+      }
+      token = jwtCookie.split("=")[1];
+    } else {
+      if (localstorage) {
+        token = localStorage?.getItem("token");
+        user = JSON.parse(localStorage?.getItem("user"));
+      }
     }
-    const jwtCookie = req.headers.cookie
-      .split(";")
-      .find((c) => c.trim().startsWith("jwt="));
-
-    const accUserCookie = req.headers.cookie
-      .split(";")
-      .find((c) => c.trim().startsWith("acc_user="));
-
-    const userCookie = accUserCookie.substr(accUserCookie.indexOf("=") + 1);
-    user = JSON.parse(decodeURIComponent(userCookie));
-
-    if (!jwtCookie) {
-      return;
-    }
-    token = jwtCookie.split("=")[1];
-    // } else {
-    //   token = localStorage?.getItem("token");
-    //   user = JSON.parse(localStorage?.getItem("user"));
-    // }
     commit("setToken", token);
     commit("setUserData", user);
   },
